@@ -3,8 +3,13 @@ import torch.nn as nn
 
 from einops import rearrange
 
-from flash_attn.flash_attn_interface import flash_attn_varlen_qkvpacked_func
-from flash_attn.bert_padding import unpad_input, pad_input
+try:
+    from flash_attn.flash_attn_interface import flash_attn_varlen_qkvpacked_func
+    from flash_attn.bert_padding import unpad_input, pad_input
+    FLASH_ATTN_AVAILABLE = True
+except ImportError:
+    FLASH_ATTN_AVAILABLE = False
+    print("Warning: flash_attn not installed. FlashAttention will not be available.")
 
 
 class FlashAttention(nn.Module):
@@ -20,6 +25,9 @@ class FlashAttention(nn.Module):
 
     def __init__(self, softmax_scale=None, attention_dropout=0.0, device=None, dtype=None):
         super().__init__()
+        if not FLASH_ATTN_AVAILABLE:
+            raise ImportError("FlashAttention requires flash_attn to be installed. Please install it with: pip install flash-attn")
+        
         self.softmax_scale = softmax_scale
         self.dropout_p = attention_dropout
 
@@ -32,6 +40,9 @@ class FlashAttention(nn.Module):
                 if unpadded: (nnz, 3, h, d)
             key_padding_mask: a bool tensor of shape (B, S)
         """
+        if not FLASH_ATTN_AVAILABLE:
+            raise ImportError("FlashAttention requires flash_attn to be installed. Please install it with: pip install flash-attn")
+            
         assert not need_weights
         assert qkv.dtype in [torch.float16, torch.bfloat16]
         assert qkv.is_cuda

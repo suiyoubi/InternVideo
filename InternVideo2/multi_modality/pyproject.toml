@@ -21,7 +21,6 @@ dependencies = [
     "decord>=0.6.0",
     "deepspeed>=0.15.1",
     "einops>=0.8.0",
-    "flash_attn>=2.6.3",
     "fvcore>=0.1.5.post20221221",
     "imageio>=2.35.1",
     "librosa>=0.10.2.post1",
@@ -48,10 +47,10 @@ dependencies = [
 [project.optional-dependencies]
 # These dependencies require building a lot of CUDA files, so it's best to run with many pip workers:
 #   MAX_JOBS=24 pip install internvideo2_multi_modality[extra-git-deps]
-extra-git-deps = [
-    "dropout_layer_norm @ git+https://github.com/Dao-AILab/flash-attention.git@v2.6.3#subdirectory=csrc/layer_norm",
-    "fused_dense_lib @ git+https://github.com/Dao-AILab/flash-attention.git@v2.6.3#subdirectory=csrc/fused_dense_lib/"
-]
+# extra-git-deps = [
+#     "dropout_layer_norm @ git+https://github.com/Dao-AILab/flash-attention.git@v2.6.3#subdirectory=csrc/layer_norm",
+#     "fused_dense_lib @ git+https://github.com/Dao-AILab/flash-attention.git@v2.6.3#subdirectory=csrc/fused_dense_lib/"
+# ]
 
 # Map the current directory to the package name `internvideo2_multi_modality`
 [tool.setuptools]
